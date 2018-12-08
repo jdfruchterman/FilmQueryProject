@@ -53,6 +53,47 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		// ...
 		return film;
 	}
+	public List<Film> getFilmByKeyword(String keyword) {
+		Film film = null;
+		List<Film> listOfFilmsMatchingKeyword = new ArrayList<>();
+		String user = "student";
+		String pass = "student";
+		Connection conn;
+		try {
+			conn = DriverManager.getConnection(URL, user, pass);
+			// ...
+			String sql = "SELECT id, title, description, release_year, language_id, rental_duration, ";
+			sql += " rental_rate, length, replacement_cost, rating, special_features " + " FROM film "
+					+ " WHERE title LIKE ? OR description LIKE ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, "%" + keyword + "%");
+			stmt.setString(2, "%" + keyword + "%");
+			ResultSet filmResult = stmt.executeQuery();
+			while (filmResult.next()) {
+				film = new Film(); // Create the object
+				// Here is our mapping of query columns to our object fields:
+				film.setiD(filmResult.getInt(1));
+				film.setTitle(filmResult.getString(2));
+				film.setDescription(filmResult.getString(3));
+				film.setReleaseYear(filmResult.getInt(4));
+				film.setLanguageId(filmResult.getInt(5));
+				film.setRentalDuration(filmResult.getInt(6));
+				film.setRentalRate(filmResult.getDouble(7));
+				film.setLength(filmResult.getInt(8));
+				film.setReplacementCost(filmResult.getDouble(9));
+				film.setRating(filmResult.getString(10));
+				film.setSpecialFeatures(filmResult.getString(11));
+				film.setActors(getActorsByFilmId(filmResult.getInt(1)));
+				listOfFilmsMatchingKeyword.add(film);
+			}
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		// ...
+		return listOfFilmsMatchingKeyword;
+	}
 
 	@Override
 	public Actor getActorById(int actorId) {

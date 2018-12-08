@@ -1,5 +1,6 @@
 package com.skilldistillery.filmquery.app;
 
+import java.util.List;
 import java.util.Scanner;
 
 import com.skilldistillery.filmquery.database.DatabaseAccessor;
@@ -52,14 +53,22 @@ public class FilmQueryApp {
 //				System.out.println(db.getFilmById(filmId));
 				continue;
 			case 2:
+				input.nextLine();
 				System.out.println("Please enter the search keyword.");
-				String keyWord = input.next();
-				// Film film = // get film by keyword search
-				System.out.println("Get film by keyword.");
+				String keyword = input.nextLine();
+//				input.nextLine();
+				List<Film> films = db.getFilmByKeyword(keyword);
+				if (films.size() > 0) {
+					for (Film film2 : films) {
+						System.out.println(film2.getTitle());
+					}
+				}
+				else  { System.out.println("No matching film found."); }
 				continue;
 			case 3:
 				System.out.println("Have a nice day!");
 				break;
+			default: continue;
 
 			}
 		} while (selection != 3);
