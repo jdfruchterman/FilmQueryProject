@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import com.skilldistillery.filmquery.database.DatabaseAccessor;
 import com.skilldistillery.filmquery.database.DatabaseAccessorObject;
+import com.skilldistillery.filmquery.entities.Actor;
 import com.skilldistillery.filmquery.entities.Film;
 
 public class FilmQueryApp {
@@ -46,10 +47,16 @@ public class FilmQueryApp {
 				System.out.println("Please enter the film ID Number.");
 				int filmId = input.nextInt();
 				Film film = db.getFilmById(filmId);
-				System.out.println(film.getTitle() 
-						+ " \n" + film.getReleaseYear() 
-						+ " \n" + film.getRating() 
-						+ " \n" + film.getDescription());
+				System.out.println("Title: " + film.getTitle() 
+						+ " \nRelease Year: " + film.getReleaseYear() 
+						+ " \nRating: " + film.getRating() 
+						+ " \nSynopsis: " + film.getDescription()
+						+ " \nLanguage: " + film.getLanguage());
+				System.out.println("Cast: ");
+				for (Actor actor : film.getActors()) {
+					System.out.println(actor.getFirstName() + " " + actor.getLastName());
+				}
+				
 //				System.out.println(db.getFilmById(filmId));
 				continue;
 			case 2:
